@@ -99,6 +99,21 @@ Además:
 
 ---
 
+## ⚙️ Requisitos del servidor
+
+| Requisito | Detalle |
+|-----------|---------|
+| PHP | 8.0 o superior (probado en 8.4) |
+| Extensiones | `pdo_mysql` (obligatoria), `mbstring` y `fileinfo` (recomendadas) |
+| MySQL / MariaDB | 5.7+ / 10.2+ con `utf8mb4` |
+| Subida de archivos | `file_uploads = On`, `upload_max_filesize ≥ 2M` |
+| Servidor web | Apache con `.htaccess` (o Nginx con reglas equivalentes) |
+
+> El código funciona aunque `mbstring` o `fileinfo` no estén activas: usa funciones de respaldo
+> (`longitud()`, `mime_de_archivo()`). Aun así se recomienda activarlas desde el panel del hosting.
+
+---
+
 ## 📁 Estructura del proyecto
 
 ```

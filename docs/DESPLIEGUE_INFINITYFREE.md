@@ -133,6 +133,7 @@ Guardar y abrir `https://agenda-contactos.rf.gd/`.
 | Las fotos no se ven | Faltó subir `archivos/` o sus permisos no permiten escritura. |
 | Las fotos no se guardan | Límite de subida del hosting; reducir la imagen a menos de 2 MB. |
 | Error 500 al abrir una página | Revisar que la versión de PHP del panel sea **8.x** (menú *PHP Configuration*). |
+| Error 500 solo al subir una foto | Activar la extensión `fileinfo` en *PHP Configuration* → *Extensions*. |
 | El sitio tarda en abrir la primera vez | Normal en hosting gratuito: el primer acceso “despierta” el servicio. |
 
 ---

@@ -394,7 +394,7 @@ function definiciones() {
   });
 
   const c8a = bloque('includes/funciones.php', '// --- teléfono (obligatorio', '// --- fotografía');
-  const c8b2 = bloque('crear.php', 'label for="telefono"', 'title="Entre 7 y 30 caracteres', 1);
+  const c8b2 = bloque('crear.php', '<label for="nombre">', 'title="Entre 7 y 30 caracteres', 1);
   d.push({
     n: 8,
     titulo: 'Validación de formularios (HTML5 y servidor)',
@@ -483,6 +483,10 @@ function marcoConsola(c) {
 
 function construirHTML(evidencias) {
   const fecha = '24 de noviembre de 2026';
+  const publicada = !/localhost|127\.0\.0\.1/i.test(BASE);
+  const urlSistema = publicada
+    ? `${BASE}/index.php`
+    : 'Pendiente de publicar — completar con la URL del hosting';
 
   const portada = pagina(`
     <div class="portada">
@@ -505,7 +509,7 @@ function construirHTML(evidencias) {
 
       <div class="portada__enlaces">
         <p><strong>Repositorio:</strong> ${esc(REPO_URL)}</p>
-        <p><strong>Sistema publicado:</strong> ${esc(BASE)}/index.php</p>
+        <p><strong>Sistema publicado:</strong> ${esc(urlSistema)}</p>
         <p><strong>Tecnologías:</strong> PHP 8 · MySQL/MariaDB · PDO · HTML5 · CSS3</p>
       </div>
     </div>
@@ -533,7 +537,7 @@ function construirHTML(evidencias) {
     <table class="tabla tabla--compacta">
       <tbody>
         <tr><th>Repositorio</th><td>${esc(REPO_URL)}</td></tr>
-        <tr><th>Sistema publicado</th><td>${esc(BASE)}/index.php</td></tr>
+        <tr><th>Sistema publicado</th><td>${esc(urlSistema)}</td></tr>
         <tr><th>Base de datos</th><td><code>agenda_contactos</code> · tabla <code>contactos</code></td></tr>
         <tr><th>Total de páginas</th><td>Portada, índice, introducción, 10 especificaciones, conclusiones y anexos</td></tr>
       </tbody>
@@ -724,7 +728,7 @@ function construirHTML(evidencias) {
     <table class="tabla">
       <tbody>
         <tr><th>Repositorio GitHub</th><td>${esc(REPO_URL)}</td></tr>
-        <tr><th>Sistema publicado</th><td>${esc(BASE)}/index.php</td></tr>
+        <tr><th>Sistema publicado</th><td>${esc(urlSistema)}</td></tr>
         <tr><th>Reporte PDF</th><td><code>docs/Reporte_Evidencias_Agenda.pdf</code></td></tr>
       </tbody>
     </table>

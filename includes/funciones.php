@@ -142,6 +142,36 @@ function limpiar_formulario(): void
 }
 
 /* ---------------------------------------------------------------------------
+ * Utilidades de texto y archivos (compatibles con hostings sin mbstring/fileinfo)
+ * ------------------------------------------------------------------------- */
+
+/** Longitud de una cadena en caracteres (usa mbstring si está disponible). */
+function longitud(string $texto): int
+{
+    return function_exists('mb_strlen') ? mb_strlen($texto, 'UTF-8') : strlen($texto);
+}
+
+/** Primer carácter de una cadena, en mayúsculas. */
+function inicial(string $texto): string
+{
+    $letra = function_exists('mb_substr') ? mb_substr($texto, 0, 1, 'UTF-8') : substr($texto, 0, 1);
+    return function_exists('mb_strtoupper') ? mb_strtoupper($letra, 'UTF-8') : strtoupper($letra);
+}
+
+/**
+ * Devuelve el MIME real de un archivo. Usa finfo (extensión fileinfo) y, si el
+ * hosting no la tiene habilitada, recurre a getimagesize().
+ */
+function mime_de_archivo(string $ruta): string
+{
+    if (class_exists('finfo')) {
+        return (string) (new finfo(FILEINFO_MIME_TYPE))->file($ruta);
+    }
+    $info = @getimagesize($ruta);
+    return is_array($info) && isset($info['mime']) ? (string) $info['mime'] : '';
+}
+
+/* ---------------------------------------------------------------------------
  * Validación de los datos del contacto (validación de SERVIDOR)
  * ------------------------------------------------------------------------- */
 
@@ -166,14 +196,14 @@ function validar_contacto(array $entrada, bool $fotoObligatoria): array
     // --- nombre -----------------------------------------------------------
     if ($datos['nombre'] === '') {
         $errores['nombre'] = 'El nombre es obligatorio.';
-    } elseif (mb_strlen($datos['nombre']) > 100) {
+    } elseif (longitud($datos['nombre']) > 100) {
         $errores['nombre'] = 'El nombre no puede superar los 100 caracteres.';
     }
 
     // --- apellido ---------------------------------------------------------
     if ($datos['apellido'] === '') {
         $errores['apellido'] = 'El apellido es obligatorio.';
-    } elseif (mb_strlen($datos['apellido']) > 100) {
+    } elseif (longitud($datos['apellido']) > 100) {
         $errores['apellido'] = 'El apellido no puede superar los 100 caracteres.';
     }
 
@@ -188,16 +218,16 @@ function validar_contacto(array $entrada, bool $fotoObligatoria): array
     if ($datos['email'] !== '') {
         if (!filter_var($datos['email'], FILTER_VALIDATE_EMAIL)) {
             $errores['email'] = 'El correo electrónico no tiene un formato válido.';
-        } elseif (mb_strlen($datos['email']) > 150) {
+        } elseif (longitud($datos['email']) > 150) {
             $errores['email'] = 'El correo no puede superar los 150 caracteres.';
         }
     }
 
     // --- dirección / notas (opcionales, con límite de longitud) -----------
-    if (mb_strlen($datos['direccion']) > 255) {
+    if (longitud($datos['direccion']) > 255) {
         $errores['direccion'] = 'La dirección no puede superar los 255 caracteres.';
     }
-    if (mb_strlen($datos['notas']) > 2000) {
+    if (longitud($datos['notas']) > 2000) {
         $errores['notas'] = 'Las notas no pueden superar los 2000 caracteres.';
     }
 
@@ -224,8 +254,7 @@ function validar_contacto(array $entrada, bool $fotoObligatoria): array
             $errores['foto'] = 'La carpeta de archivos no tiene permisos de escritura.';
         } else {
             // Se verifica el contenido real del archivo, no la extensión.
-            $finfo = new finfo(FILEINFO_MIME_TYPE);
-            $mime  = (string) $finfo->file($_FILES['foto']['tmp_name']);
+            $mime = mime_de_archivo($_FILES['foto']['tmp_name']);
             if (!isset(MIMES_PERMITIDOS[$mime])) {
                 $errores['foto'] = 'Formato no permitido. Use JPG, PNG, WEBP o GIF.';
             } elseif (@getimagesize($_FILES['foto']['tmp_name']) === false) {
@@ -249,7 +278,7 @@ function validar_contacto(array $entrada, bool $fotoObligatoria): array
  */
 function guardar_foto(): string
 {
-    $mime   = (string) (new finfo(FILEINFO_MIME_TYPE))->file($_FILES['foto']['tmp_name']);
+    $mime   = mime_de_archivo($_FILES['foto']['tmp_name']);
     $ext    = MIMES_PERMITIDOS[$mime] ?? 'jpg';
     $nombre = 'contacto_' . date('Ymd_His') . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
     $destino = RUTA_ARCHIVOS . '/' . $nombre;
@@ -305,7 +334,5 @@ function leer_id(mixed $valor): int
 /** Iniciales del contacto para el avatar de respaldo. */
 function iniciales(array $contacto): string
 {
-    $a = mb_substr((string) $contacto['nombre'], 0, 1);
-    $b = mb_substr((string) $contacto['apellido'], 0, 1);
-    return mb_strtoupper($a . $b);
+    return inicial((string) $contacto['nombre']) . inicial((string) $contacto['apellido']);
 }
