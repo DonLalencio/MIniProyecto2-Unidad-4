@@ -1,0 +1,9 @@
+# Acceso directo denegado: el script SQL se ejecuta desde phpMyAdmin o consola.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
