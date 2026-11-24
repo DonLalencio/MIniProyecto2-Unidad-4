@@ -23,3 +23,7 @@ archivos/contacto_*.png
 archivos/contacto_*.jpg
 archivos/contacto_*.webp
 archivos/contacto_*.gif
+
+# Generador del reporte
+tools/reporte/tmp/
+tools/reporte/package-lock.json
