@@ -26,9 +26,9 @@ const TMP = process.env.TMP_DIR || path.join(PROYECTO, 'tools', 'reporte', 'tmp'
 const IMG = (rel) => 'file:///' + path.join(OUT, rel).replace(/\\/g, '/');
 
 const INTEGRANTES = [
-  ['1', 'Brandon Emilio Hernández', '—', 'Conexión PDO, CRUD, validaciones, despliegue'],
-  ['2', '_(integrante 2)_', '—', '_(completar)_'],
-  ['3', '_(integrante 3)_', '—', '_(completar)_'],
+  ['1', 'Brandon Emilio Hernández', '—'],
+  ['2', 'Paola Kasumy Gómez Sánchez', '—'],
+  ['3', 'Christian Eduardo Rosales González', '—'],
 ];
 const MATERIA = 'Programación Web';
 const DOCENTE = '_(completar)_';
@@ -78,7 +78,16 @@ async function capturarNavegador() {
     console.log('  · captura', nombre);
   };
 
-  const ir = (ruta) => page.goto(BASE + ruta, { waitUntil: 'networkidle0' });
+  const ir = async (ruta) => {
+    await page.goto(BASE + ruta, { waitUntil: 'networkidle2', timeout: 90000 });
+    // Espera a que la página sea la aplicación (no el reto anti-bot del hosting)
+    await page.waitForSelector('h1, .portada, .resumen-errores', { timeout: 45000 }).catch(() => {});
+  };
+
+  // Calentamiento: resuelve el reto JavaScript del hosting (cookie __test) antes de capturar
+  await page.goto(BASE + '/', { waitUntil: 'networkidle2', timeout: 90000 });
+  await page.waitForSelector('h1', { timeout: 45000 }).catch(() => {});
+  await new Promise((r) => setTimeout(r, 800));
 
   // 1. Listado principal
   await ir('/index.php');
@@ -106,7 +115,7 @@ async function capturarNavegador() {
   await ir('/crear.php');
   await page.type('#email', 'correo-invalido');
   await page.evaluate(() => document.querySelector('#foto') && document.querySelector('form.formulario').submit());
-  await page.waitForNavigation({ waitUntil: 'networkidle0' });
+  await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 90000 });
   await shot('validacion', {
     full: true,
     leyenda: 'Validación en servidor: mensajes por campo y conservación de los datos escritos.',
@@ -131,7 +140,7 @@ async function capturarNavegador() {
   await page.evaluate(() => document.activeElement.blur());
   await shot('crear_form', { full: true, leyenda: 'Formulario de creación con los datos capturados y la imagen seleccionada.' });
   await Promise.all([
-    page.waitForNavigation({ waitUntil: 'networkidle0' }),
+    page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 90000 }),
     page.click('button[type="submit"]'),
   ]);
   const nuevoId = new URL(page.url()).searchParams.get('id');
@@ -149,7 +158,7 @@ async function capturarNavegador() {
     document.querySelector('#direccion').value = 'Av. Olímpica #45, San Salvador';
   });
   await Promise.all([
-    page.waitForNavigation({ waitUntil: 'networkidle0' }),
+    page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 90000 }),
     page.click('button[type="submit"]'),
   ]);
   await shot('actualizar_ok', {
@@ -162,7 +171,7 @@ async function capturarNavegador() {
     document.querySelector('#notas').value = '<script>alert("XSS en notas")</script> Texto de prueba';
   });
   await Promise.all([
-    page.waitForNavigation({ waitUntil: 'networkidle0' }),
+    page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 90000 }),
     page.click('button[type="submit"]'),
   ]);
   await shot('xss_notas', {
@@ -176,7 +185,7 @@ async function capturarNavegador() {
     leyenda: 'Pantalla de confirmación previa a la eliminación (formulario POST).',
   });
   await Promise.all([
-    page.waitForNavigation({ waitUntil: 'networkidle0' }),
+    page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 90000 }),
     page.click('button[type="submit"]'),
   ]);
   await shot('eliminar_ok', {
@@ -195,14 +204,14 @@ async function capturarConsolas() {
   const consultas = [
     {
       nombre: 'consola_bd',
-      leyenda: 'Consulta real a MySQL/MariaDB con la tabla contactos creada por database/agenda.sql.',
+      leyenda: 'Consulta real a MySQL/MariaDB (entorno de desarrollo, misma base definida en database/agenda.sql).',
       comando: `mariadb -u root agenda_contactos -e "SELECT id, nombre, apellido, telefono, foto FROM contactos;"`,
       args: ['-u', 'root', 'agenda_contactos', '-e',
         'SELECT id, nombre, apellido, telefono, foto FROM contactos;'],
     },
     {
       nombre: 'consola_estructura',
-      leyenda: 'Estructura de la tabla contactos en la base de datos MySQL.',
+      leyenda: 'Estructura de la tabla contactos en MySQL (misma definición que database/agenda.sql).',
       comando: `mariadb -u root agenda_contactos -e "DESCRIBE contactos;"`,
       args: ['-u', 'root', 'agenda_contactos', '-e', 'DESCRIBE contactos;'],
     },
@@ -503,8 +512,8 @@ function construirHTML(evidencias) {
       </div>
 
       <table class="tabla-portada">
-        <thead><tr><th>#</th><th>Integrante</th><th>Matrícula</th><th>Participación</th></tr></thead>
-        <tbody>${INTEGRANTES.map(([n, nom, mat, rol]) => `<tr><td>${n}</td><td>${esc(nom)}</td><td>${esc(mat)}</td><td>${esc(rol)}</td></tr>`).join('')}</tbody>
+        <thead><tr><th>#</th><th>Integrante</th><th>Matrícula</th></tr></thead>
+        <tbody>${INTEGRANTES.map(([n, nom, mat]) => `<tr><td>${n}</td><td>${esc(nom)}</td><td>${esc(mat)}</td></tr>`).join('')}</tbody>
       </table>
 
       <div class="portada__enlaces">

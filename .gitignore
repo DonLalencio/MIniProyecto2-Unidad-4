@@ -27,3 +27,6 @@ archivos/contacto_*.gif
 # Generador del reporte
 tools/reporte/tmp/
 tools/reporte/package-lock.json
+
+# Capturas propias con credenciales del hosting (no publicar)
+campuras de funcionamiento y creancion de base de datos.pdf

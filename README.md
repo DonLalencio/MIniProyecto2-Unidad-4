@@ -12,11 +12,11 @@ editar y eliminar contactos con fotografía.
 
 ## 👥 Integrantes del equipo
 
-| # | Nombre completo | Matrícula | Rol |
-|---|-----------------|-----------|-----|
-| 1 | Brandon Emilio Hernández | — | Desarrollo PHP, base de datos y despliegue |
-| 2 | _(integrante 2)_ | — | _(completar)_ |
-| 3 | _(integrante 3)_ | — | _(completar)_ |
+| # | Nombre completo | Matrícula |
+|---|-----------------|-----------|
+| 1 | Brandon Emilio Hernández | — |
+| 2 | Paola Kasumy Gómez Sánchez | — |
+| 3 | Christian Eduardo Rosales González | — |
 
 **Docente:** _(completar)_
 **Institución:** _(completar)_
@@ -29,7 +29,7 @@ editar y eliminar contactos con fotografía.
 | Recurso | Enlace |
 |---------|--------|
 | Repositorio GitHub | https://github.com/DonLalencio/MIniProyecto2-Unidad-4 |
-| Sistema publicado (hosting) | _pendiente de publicar — reemplazar con la URL real_ |
+| Sistema publicado (hosting) | https://agenda-contactos845.rf.gd/ |
 | Reporte de evidencias (PDF) | [`docs/Reporte_Evidencias_Agenda.pdf`](docs/Reporte_Evidencias_Agenda.pdf) |
 
 ---
@@ -186,6 +186,9 @@ Además:
 ---
 
 ## 🌐 Publicación en hosting gratuito (InfinityFree / AeonFree / ByetHost)
+
+> **Sistema ya publicado:** <https://agenda-contactos845.rf.gd/> (InfinityFree, PHP 8 + MySQL).
+> La guía detallada de despliegue está en [`docs/DESPLIEGUE_INFINITYFREE.md`](docs/DESPLIEGUE_INFINITYFREE.md).
 
 1. Registrarse y crear una **cuenta + sitio** en el hosting.
 2. En el panel, abrir **MySQL Databases** y crear una base de datos
