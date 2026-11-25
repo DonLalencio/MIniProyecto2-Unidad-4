@@ -57,7 +57,7 @@ require __DIR__ . '/includes/header.php';
 <?php endif; ?>
 
 <div class="tarjeta">
-    <form class="formulario" action="actualizar.php" method="post" enctype="multipart/form-data" novalidate>
+    <form class="formulario" action="actualizar.php" method="post" enctype="multipart/form-data">
         <?= csrf_campo() ?>
         <input type="hidden" name="id" value="<?= (int) $contacto['id'] ?>">
 
