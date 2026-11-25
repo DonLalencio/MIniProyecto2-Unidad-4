@@ -18,9 +18,10 @@ editar y eliminar contactos con fotografía.
 | 2 | Paola Kasumy Gómez Sánchez | 24270332 |
 | 3 | Christian Eduardo Rosales González | 25270553 |
 
-**Docente:** _(completar)_
-**Institución:** _(completar)_
-**Fecha de entrega:** Noviembre 2026
+**Docente:** _Guzman Sanchez Jorge Octavio_
+**Institución:** _Instituto Tecnológico Nacional De México
+Campus Tuxtla Gutiérrez_
+**Fecha de entrega:** 25 de Noviembre de 2026
 
 ---
 
