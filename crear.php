@@ -41,7 +41,7 @@ require __DIR__ . '/includes/header.php';
 
 <div class="tarjeta">
     <!-- multipart/form-data es obligatorio para enviar archivos -->
-    <form class="formulario" action="guardar.php" method="post" enctype="multipart/form-data" novalidate>
+    <form class="formulario" action="guardar.php" method="post" enctype="multipart/form-data">
         <?= csrf_campo() ?>
 
         <div class="formulario__rejilla">
