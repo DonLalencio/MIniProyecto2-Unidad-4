@@ -115,9 +115,15 @@ function post(string $campo): string
 }
 
 /** Recupera un valor "antiguo" para repintar el formulario tras un error. */
+/** Recupera un valor "antiguo" para repintar el formulario tras un error. */
 function viejo(string $campo, string $porDefecto = ''): string
 {
-    return (string) ($_SESSION['form_old'][$campo] ?? $porDefecto);
+    static $valores = null;
+    if ($valores === null) {               // la primera llamada los consume
+        $valores = $_SESSION['form_old'] ?? [];
+        unset($_SESSION['form_old']);
+    }
+    return (string) ($valores[$campo] ?? $porDefecto);
 }
 
 /** Errores de validación pendientes (se consumen al pintar el formulario). */
@@ -336,3 +342,4 @@ function iniciales(array $contacto): string
 {
     return inicial((string) $contacto['nombre']) . inicial((string) $contacto['apellido']);
 }
+
