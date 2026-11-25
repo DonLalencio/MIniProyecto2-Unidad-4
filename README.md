@@ -16,7 +16,7 @@ editar y eliminar contactos con fotografía.
 |---|-----------------|-----------|
 | 1 | Brandon Emilio Hernández | — |
 | 2 | Paola Kasumy Gómez Sánchez | — |
-| 3 | Christian Eduardo Rosales González | — |
+| 3 | Christian Eduardo Rosales González | 25270553 |
 
 **Docente:** _(completar)_
 **Institución:** _(completar)_
