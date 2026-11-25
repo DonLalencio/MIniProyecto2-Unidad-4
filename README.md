@@ -14,7 +14,7 @@ editar y eliminar contactos con fotografía.
 
 | # | Nombre completo | Matrícula |
 |---|-----------------|-----------|
-| 1 | Brandon Emilio Hernández | — |
+| 1 | Brandon Emilio Hernández | 24270363 |
 | 2 | Paola Kasumy Gómez Sánchez | — |
 | 3 | Christian Eduardo Rosales González | 25270553 |
 
